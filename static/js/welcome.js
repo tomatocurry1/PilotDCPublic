@@ -1,3 +1,3 @@
 $(document).ready(function() {
-	$("#brand").hide().fadeIn("slow");
+	$("body").hide().fadeIn("slow");
 });
