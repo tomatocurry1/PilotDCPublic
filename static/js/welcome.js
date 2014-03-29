@@ -1,3 +1,3 @@
 $(document).ready(function() {
-    $("h1").animate({top: "+=100px"}, 1000);
+	$("#brand").hide().fadeIn("slow");
 });
