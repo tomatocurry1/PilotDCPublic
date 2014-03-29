@@ -3,3 +3,7 @@ h1 {
 	padding-top: 20%;
 	padding-bottom: 0%;
 }
+
+.col-sm-3 {
+	border: 5px solid black;
+}
