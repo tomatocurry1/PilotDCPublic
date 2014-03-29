@@ -1,4 +1,15 @@
 h1 {
-	padding-top: 50%;
-	padding-bottom: 50%;
+	font-size: 70px;
+	padding-top: 20%;
+	padding-bottom: 0%;
+}
+
+.left {
+	float: left;
+	width: 25%;
+}
+
+.right {
+	float: right;
+	width: 25%;
 }
