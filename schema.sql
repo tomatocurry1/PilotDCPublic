@@ -11,19 +11,21 @@ CREATE TABLE users (
 
 CREATE TABLE favors (
     favor_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
+    creator_id INTEGER,
     title TEXT,
     content TEXT,
     location_description TEXT,
     requirements TEXT,
     state INTEGER, -- 0 = America (free), 1 = taken, 2 = completed
+    worker_id INTEGER,
     creation_date DATE,
     deadline DATE,
     cost INTEGER,
     payment INTEGER,
     longitude REAL,
     latitude REAL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (creator_id) REFERENCES users(user_id),
+    FOREIGN KEY (worker_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE favor_permissions (
