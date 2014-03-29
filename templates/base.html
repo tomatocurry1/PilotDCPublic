@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        {% block head %}
+            <title> Favorable - {% block title %} Favor Tracking and Outsourcing {% endblock %} </title>
+            <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.css')}}">
+            <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
+            <script src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
+            <script src="{{url_for('static', filename='js/jquery-2.1.0.js')}}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div id="wrap"> <!-- wrapper to push down footer -->
+            {% set nav = [
+                ('/login', 'login', 'Login / Register', 'username' not in session),
+                ('/logout', 'logout', 'Logout', 'username' in session),
+                ('/user', 'userpage', 'You', 'username' in session),
+                ('/create', 'create', 'Post Task', 'username' in session),
+                ('/find', 'findtask', 'Find Tasks', True),
+                ('/about', 'about', 'About Us', True),
+                ('/community', 'comm', 'Community', True),
+            ] %}
+
+            {% set nav_current = nav_current | default('index') %}
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container" text-align="center">
+                    <a href="/" class="navbar-brand"><img id="logo" src="http://placehold.it/100x100" height="50" width="50">Favorable</a>
+                    {% for href, tag_id, display, should_render in nav %}
+                        {% if should_render %}
+                            <a href="{{href}}" id="{{tag_id}}" class="navbar-text navbar-link{% if tag_id == nav_current %} active{% endif %}">
+                                {{display}}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </nav>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <div class="content container">
+                <h1> {% block header %} {{ self.title() }} {% endblock %} </h1>
+                <div>
+                    {% block body %} {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div id="footer">
+            {% block footer %}
+                <div class="container">
+                    <p class="muted credit">
+                        {% block footer_content %}
+                            Favorable, an app made at PilotDC by Team JATT (Austin Ly, Thomas Lee, Thai Lee, and Jonathon Vogel).
+                        {% endblock %}
+                        &copy; 2014
+                    </p>
+                </div>
+            {% endblock footer %}
+        </div>
+    </body>
+</html>

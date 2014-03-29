@@ -76,7 +76,7 @@ def register():
     return flask.redirect(flask.url_for('login'))
 
 
-@app.route('/users')
+@app.route('/user')
 @app.route('/user/<int:user_id>')
 def user(user_id = None):
     if user_id is None:
@@ -86,6 +86,10 @@ def user(user_id = None):
             return flask.abort(404)
     else:
         return 'hi user {}'.format(user_id)
+
+@app.route('/about')
+def about():
+    return flask.render_template('about.html')
 
 if __name__ == '__main__':
     app.run(debug = config.debug)
