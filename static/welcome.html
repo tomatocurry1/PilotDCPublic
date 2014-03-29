@@ -26,9 +26,25 @@
 		<script src="js/welcome.js"></script>
 		
 		<h1 id="brand" class="text-center">Favorable</h1>
-		<div class="row">
-		<img id="logo" src="img/ICON.png">
-		<h2>Register</h2>
+		<div id="register" class="container">
+			<div class="row">
+				<div id="left" class="col-sm-6"><img id="logo" src="img/ICON.png"></div>
+				<div id="right" class="col-sm-6">
+					<form role="form">
+						<div class="form-group">
+							<input id="username" type="text" class="form-control" placeholder="Username">
+							<input id="password" type="text" class="form-control" placeholder="Password">
+							<input id="email" type="email" class="form-control" placeholder="Email">
+							<input id="longitude" type="text" class="location form-control" placeholder="Latitude">
+							<input id="latitude" type="text" class="location form-control" placeholder="Longitude">
+							<button id="regbutton" type="submit" class="btn btn-primary">Register</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
+
+		<h3 id="login-to-register" class="text-center">Already a user? <button id="login-button" class="btn btn-primary">Login</button></h3>
+		<h3 id="register-to-login" class="text-center hidden">Not signed up? <button id="register-button" class="btn btn-primary">Register</button></h3>
 	</body>
 </html>

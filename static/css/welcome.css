@@ -1,5 +1,26 @@
 h1 {
 	font-size: 70px;
-	padding-top: 20%;
+	padding-top: 100px;
 	padding-bottom: 0%;
+}
+
+#logo {
+	float: right;
+}
+
+#right {
+	width: 350px;
+}
+
+.form-control {
+	margin-bottom: 5px;
+	width: 304px;
+}
+
+#username {
+	margin-top: 60px;
+}
+
+#regbutton {
+	width: 304px;
 }
