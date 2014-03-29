@@ -13,18 +13,14 @@
     padding-bottom: 0px;
 }
 
-html,
-body {
+html, body {
     height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
 }
 
 #wrap {
     min-height: 100%;
     height: auto;
-    /* Negative indent footer by its height */
     margin: 0 auto -30px;
-    /* Pad bottom by footer height */
     padding: 0 0 60px;
 }
 
