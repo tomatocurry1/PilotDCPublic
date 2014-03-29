@@ -17,18 +17,10 @@ h1 {
 	width: 304px;
 }
 
-#name {
+#username {
 	margin-top: 60px;
-	display: inline-block;
-	width: 150px;
 }
 
-#location {
-	display: inline-block;
-	width: 150px;
-}
-
-.btn {
-	display: inline;
-	background-color: light blue;
+#regbutton {
+	width: 304px;
 }
