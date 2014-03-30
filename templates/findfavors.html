@@ -7,7 +7,7 @@
 {% import "favor_block.html" as fb %}
 {% block body %}
     {% if blocks %}
-        <div id="favorlist" class="container">
+        <div id="favorlist">
             {% for block in blocks %}
                 {{ fb.render_block(block) }}
             {% endfor %}
