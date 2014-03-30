@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% set nav_current = 'about' %}
+{% block title %}Find Favors{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block body %}
+    {% if favors %}
+        <div id="favorlist" class="container">
+            {% for favor in favors %}
+                {{ render_block(favor) }}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No favors found</p>
+    {% endif %}
+{% endblock %}

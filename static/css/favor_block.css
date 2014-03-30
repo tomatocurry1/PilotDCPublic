@@ -1,0 +1,14 @@
+.block{
+    border-radius: 5px;
+    background-color: #E0EEEE;
+
+}
+
+.block-head{
+    height: 10px;
+    background-color: #5F9F9F;
+}
+
+.requester-name{
+    text-align: right;
+}

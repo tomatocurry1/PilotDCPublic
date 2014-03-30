@@ -1,0 +1,9 @@
+{% macro render_block(favor) %}
+<div class="block">
+    <div class="block-head">
+        <a href="/favors/{{favor['favor_id']}}"><strong>{{favor['title']}}</strong></a>
+        <a href="/user/{{favor['requester_id']}}" class="requester-name">{{favor['requester_name']}}</a>
+    </div>
+    <p>{{favor['content']}}</p>
+    <p>{{favor['payment']}}</p>
+</div>
