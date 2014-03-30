@@ -1,9 +1,16 @@
-{% macro render_block(favor) %}
+{% macro render_block(block) %}
 <div class="block">
     <div class="block-head">
-        <a href="/favors/{{favor['favor_id']}}"><strong>{{favor['title']}}</strong></a>
-        <a href="/user/{{favor['requester_id']}}" class="requester-name">{{favor['requester_name']}}</a>
+        <span class="badge alert-{{ ['success', 'info', 'danger', 'warning'][block['state']] }}">
+            {{ ['open', 'taken', 'completed', 'expired'][block['state']] }}
+        </span>
+        {% if block['state'] == 1 and block['worker_id'] == block['user_id'] %}
+            <span class="badge alert-success">you are working on this favor</span>
+        {% endif %}
+        <a href="/favors/{{block['favor_id']}}"><strong>{{block['title']}}</strong></a>
+        <a href="/user/{{block['requester_id']}}" class="requester-name">{{block['username']}}</a>
     </div>
-    <p>{{favor['content']}}</p>
-    <p>{{favor['payment']}}</p>
+    <p>{{block['content']}}</p>
+    <p>{{block['payment']}}</p>
 </div>
+{% endmacro %}

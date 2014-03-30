@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-{% set nav_current = 'about' %}
+{% set nav_current = 'findtask' %}
 {% block title %}Find Favors{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
+{% import "favor_block.html" as fb %}
 {% block body %}
-    {% if favors %}
+    {% if blocks %}
         <div id="favorlist" class="container">
-            {% for favor in favors %}
-                {{ render_block(favor) }}
+            {% for block in blocks %}
+                {{ fb.render_block(block) }}
             {% endfor %}
         </div>
     {% else %}

@@ -3,6 +3,8 @@
 import datetime
 import flask
 from flask.ext.bcrypt import Bcrypt as bcrypt
+import math
+import pprint
 import sqlite3
 import time
 
@@ -11,6 +13,20 @@ import config
 app = flask.Flask(__name__)
 app.secret_key = config.secret
 passcheck = bcrypt(app)
+
+def distance_on_unit_sphere(lat1, long1, lat2, long2):
+    # http://www.johndcook.com/python_longitude_latitude.html
+    degrees_to_radians = math.pi/180.0
+    phi1 = (90.0 - lat1)*degrees_to_radians
+    phi2 = (90.0 - lat2)*degrees_to_radians
+    theta1 = long1*degrees_to_radians
+    theta2 = long2*degrees_to_radians
+    cos = math.sin(phi1) * math.sin(phi2) * math.cos(theta1 - theta2) + math.cos(phi1) * math.cos(phi2)
+    arc = math.acos(cos)
+
+    # Remember to multiply arc by the radius of the earth
+    # in your favorite set of units to get length.
+    return arc * 3963.1676 # in miles
 
 def timestamp_format(timestamp, fmt='%I:%m %p, %m/%d/%Y'):
     print(timestamp)
@@ -27,6 +43,7 @@ def query_db(query, *args, one=False):
 @app.before_request
 def before_request():
     flask.g.db = sqlite3.connect(config.database)
+    flask.g.db.create_function('coordinate_distance', 4, distance_on_unit_sphere)
     prune_old_favors()
 
 def prune_old_favors():
@@ -115,7 +132,7 @@ def user(user_id = None):
         favors_posted = query_db('SELECT title, cost, content FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', flask.session['user_id'])
         favors_cmpltd = query_db('SELECT title, cost, content FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', flask.session['user_id'])
 
-        return str({
+        return pprint.pformat({
             'user_id': flask.session['user_id'],
             'username': flask.session['username'],
             'join': user_info['join_date'],
@@ -172,6 +189,12 @@ def create_favor():
         )
         favor_id = query_db('SELECT last_insert_rowid()', one=True)['last_insert_rowid()']
         return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+
+@app.route('/find/')
+def find_tasks():
+    q = query_db('SELECT *, coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude) FROM favors JOIN users ON favors.creator_id = users.user_id WHERE state = 0 ORDER BY coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude)')
+    #return pprint.pformat(q)
+    return flask.render_template('findfavors.html', blocks=q)
 
 @app.route('/favor/<int:favor_id>/')
 def get_favor(favor_id):

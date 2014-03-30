@@ -1,14 +1,28 @@
-.block{
-    border-radius: 5px;
+.block {
+    border-radius: 15px;
     background-color: #E0EEEE;
-
+    padding-bottom: 5px;
+    margin-bottom: 20px;
 }
 
-.block-head{
-    height: 10px;
+.block-head {
+    height: 35px;
     background-color: #5F9F9F;
+    padding: 5px;
 }
 
-.requester-name{
-    text-align: right;
+.block-head .badge {
+    margin-right: 5px;
+}
+
+.block-head a {
+    color: #110440;
+}
+
+.requester-name {
+    float: right;
+}
+
+.block p {
+    margin: 10px;
 }
