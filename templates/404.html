@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block body %}
+		<div class="text-center">
+			<div class="container">
+				<img id="logo" src="{{url_for('static', filename='img/404.png')}}">
+			</div>
+		</div>
+
+		<div class="text-center">
+		<h1>PAGE NOT FOUND</h1>
+		<h3>Whoops, looks like you took a wrong turn somewhere.</h3>
+		<a href="/"><h3>As a free favor, here's your way back home.</h3></a>
+		</div>
+
+
+{% endblock %}

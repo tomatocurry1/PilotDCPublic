@@ -60,6 +60,10 @@ def teardown_request(ex):
 def index():
     return flask.render_template('index.html')
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return flask.render_template('404.html'), 404
+
 @app.route('/login/', methods=['GET', 'POST'])
 @app.route('/login', methods=['POST'])
 def login():
