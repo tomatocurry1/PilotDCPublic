@@ -72,7 +72,7 @@ def register():
             flask.flash('Username taken', 'error')
         else:
             # register the user!!!!!
-            query_db('INSERT INTO users (username, password_salt, email, longitude, latitude, join_date, karma) VALUES (?, ?, ?, ?, ?, date(), 0)',
+            query_db('INSERT INTO users (username, password_salt, email, longitude, latitude, join_date, karma) VALUES (?, ?, ?, ?, ?, datetime(), 0)',
                 username, passcheck.generate_password_hash(password), email, longitude, latitude
             )
             flask.flash('Sucessfully registered as {}! Please log in'.format(username), 'success')
@@ -126,9 +126,9 @@ def create_favor():
         latitude = flask.request.form.get('latitude')
         longitude = flask.request.form.get('longitude')
         if not all([title, content, location_desc, requirements, deadline, cost, payment, latitude, longitude]):
-            flask.flash('Missing required fields')
+            flask.flash('Missing required fields', 'error')
             return flask.redirect(flask.url_for('create_favor'))
-        query_db('INSERT INTO favors(creator_id, title, content, location_description, requirements, deadline, cost, payment, latitude, longitude, state, worker_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, date())',
+        query_db('INSERT INTO favors(creator_id, title, content, location_description, requirements, deadline, cost, payment, latitude, longitude, state, worker_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, datetime())',
             session['user_id'], title, content, location_desc, requirements, deadline, cost, payment, latitude, longitude
         )
         favor_id = query_db('SELECT last_insert_rowid()', one=True).values()[0]

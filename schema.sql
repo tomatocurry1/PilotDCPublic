@@ -3,7 +3,7 @@ CREATE TABLE users (
     username TEXT,
     password_salt BLOB,
     email TEXT,
-    join_date DATE,
+    join_date TEXT,
     longitude REAL,
     latitude REAL,
     karma INTEGER
@@ -18,8 +18,8 @@ CREATE TABLE favors (
     requirements TEXT,
     state INTEGER, -- 0 = America (free), 1 = taken, 2 = completed
     worker_id INTEGER,
-    creation_date DATE,
-    deadline DATE,
+    creation_date TEXT,
+    deadline TEXT,
     cost INTEGER,
     payment INTEGER,
     longitude REAL,
