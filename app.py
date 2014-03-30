@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 
+import datetime
 import flask
 from flask.ext.bcrypt import Bcrypt as bcrypt
 import sqlite3
+import time
 
 import config
 
 app = flask.Flask(__name__)
 app.secret_key = config.secret
 passcheck = bcrypt(app)
+
+def timestamp_format(timestamp, fmt='%I:%m %p, %m/%d/%Y'):
+    print(timestamp)
+    return datetime.datetime.fromtimestamp(timestamp).strftime(fmt)
+
+app.jinja_env.filters['timestamp_format'] = timestamp_format
 
 def query_db(query, *args, one=False):
     cur = flask.g.db.execute(query, args)
@@ -19,6 +27,12 @@ def query_db(query, *args, one=False):
 @app.before_request
 def before_request():
     flask.g.db = sqlite3.connect(config.database)
+    prune_old_favors()
+
+def prune_old_favors():
+    # expire old favors
+    print(query_db('SELECT * FROM favors'))
+    query_db('UPDATE favors SET state = 3 WHERE state <= 1 AND ? > deadline', int(time.time()))
 
 @app.teardown_request
 def teardown_request(ex):
@@ -72,8 +86,8 @@ def register():
             flask.flash('Username taken', 'error')
         else:
             # register the user!!!!!
-            query_db('INSERT INTO users (username, password_salt, email, longitude, latitude, join_date, karma) VALUES (?, ?, ?, ?, ?, date(), 0)',
-                username, passcheck.generate_password_hash(password), email, longitude, latitude
+            query_db('INSERT INTO users (username, password_salt, email, longitude, latitude, join_date, karma) VALUES (?, ?, ?, ?, ?, ?, 0)',
+                username, passcheck.generate_password_hash(password), email, longitude, latitude, int(time.time())
             )
             flask.flash('Sucessfully registered as {}! Please log in'.format(username), 'success')
             return flask.redirect(flask.url_for('login') + '?directlogin')
@@ -94,10 +108,13 @@ def user(user_id = None):
         else:
             return flask.abort(404)
     else:
+        user_info = query_db('SELECT join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
+        if not user_info:
+            return flask.abort(404)
+
         favors_posted = query_db('SELECT title, cost, content FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', flask.session['user_id'])
         favors_cmpltd = query_db('SELECT title, cost, content FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', flask.session['user_id'])
 
-        user_info = query_db('SELECT join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
         return str({
             'user_id': flask.session['user_id'],
             'username': flask.session['username'],
@@ -118,26 +135,92 @@ def create_favor():
     elif flask.request.method == 'POST':
         title = flask.request.form.get('title')
         content = flask.request.form.get('content')
-        location_desc = flask.request.form.get('location_description')
+        location_desc = flask.request.form.get('location_desc')
         requirements = flask.request.form.get('requirements')
-        deadline = flask.request.form.get('deadline')
+        deadline_date = flask.request.form.get('deadline-date')
+        deadline_time = flask.request.form.get('deadline-time')
+        deadline = -1
+        try:
+            print('TIMMMMMMMEEEE', deadline_date + ' ' + deadline_time)
+            deadline = int(time.mktime(time.strptime(deadline_date + ' ' + deadline_time, '%Y-%m-%d %H:%M')))
+        except:
+            pass
+        if deadline < 0:
+            flask.flash('Invalid date/time', 'error')
+            return flask.redirect(flask.url_for('create_favor'))
+        print(deadline_date, deadline_time)
         cost = flask.request.form.get('cost')
         payment = flask.request.form.get('payment')
         latitude = flask.request.form.get('latitude')
         longitude = flask.request.form.get('longitude')
-        if not all([title, content, location_desc, requirements, deadline, cost, payment, latitude, longitude]):
-            flask.flash('Missing required fields')
+        print(title, content, location_desc, requirements, deadline_date, deadline_time, cost is not None, payment is not None, latitude, longitude)
+        if not all([title, content, location_desc, requirements, deadline_date, deadline_time, cost is not None, payment is not None, latitude, longitude]):
+            flask.flash('Missing required fields', 'error')
             return flask.redirect(flask.url_for('create_favor'))
-        query_db('INSERT INTO favors(creator_id, title, content, location_description, requirements, deadline, cost, payment, latitude, longitude, state, worker_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, date())',
-            session['user_id'], title, content, location_desc, requirements, deadline, cost, payment, latitude, longitude
+        query_db('INSERT INTO favors(creator_id, title, content, location_description, requirements, deadline, cost, payment, latitude, longitude, state, worker_id, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)',
+            flask.session['user_id'],
+            title,
+            content,
+            location_desc,
+            requirements,
+            deadline,
+            cost,
+            payment,
+            latitude,
+            longitude,
+            int(time.time())
         )
-        favor_id = query_db('SELECT last_insert_rowid()', one=True).values()[0]
-        return flask.redirect(flask.url_for('favor', favor_id=favor_id))
+        favor_id = query_db('SELECT last_insert_rowid()', one=True)['last_insert_rowid()']
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
 
 @app.route('/favor/<int:favor_id>/')
 def get_favor(favor_id):
     favor = query_db('SELECT * FROM favors WHERE favor_id = ?', favor_id, one=True)
-    return str(favor)
+    if not favor:
+        return flask.abort(404)
+    return flask.render_template('favor.html', **favor)
+
+@app.route('/workon/<int:favor_id>', methods=['POST'])
+def claim_task(favor_id):
+    if 'user_id' not in flask.session:
+        flask.flash('You must be logged in to work on a favor', 'error')
+        return flask.redirect(flask.url_for('login'))
+    favor = query_db('SELECT * FROM favors WHERE favor_id = ?', favor_id, one=True)
+    if favor['creator_id'] == flask.session['user_id']:
+        flask.flash('You can\'t work on your own favor!', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 1:
+        flask.flash('That favor is already being worked on', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 2:
+        flask.flash('That favor is already completed', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 3:
+        flask.flash('This favor has expired', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    query_db('UPDATE favors SET state = 1, worker_id = ? WHERE favor_id = ?', flask.session['user_id'], favor_id)
+    return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+
+@app.route('/markcompleted/<int:favor_id>', methods=['POST'])
+def mark_completed(favor_id):
+    if 'user_id' not in flask.session:
+        flask.flash('You must be logged in to mark a favor completed', 'error')
+        return flask.redirect(flask.url_for('login'))
+    favor = query_db('SELECT * FROM favors WHERE favor_id = ?', favor_id, one=True)
+    if favor['creator_id'] != flask.session['user_id']:
+        flask.flash('You can\'t mark someone else\'s favor completed!', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 0:
+        flask.flash('This favor can\'t be marked as completed because it hasn\'t been started', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 2:
+        flask.flash('This favor has already been marked completed', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    elif favor['state'] == 3:
+        flask.flash('This favor has expired', 'error')
+        return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
+    query_db('UPDATE favors SET state = 2 WHERE favor_id = ?', favor_id)
+    return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
 
 @app.route('/about/')
 def about():
