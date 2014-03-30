@@ -3,16 +3,19 @@ body {
 }
 
 img {
-	border: 5px solid black;
+	margin-left: 25%;
+	padding-top: 30px;
 }
 
 #username {
 	padding-top: 30px;
 }
 
-#inProgress {
-	margin-left: 25%;
-	margin-right: 25%;
-	width: 50%;
+#favors {
 	border: 0 auto;
 }
+
+#bottom {
+	width:50%;
+}
+
