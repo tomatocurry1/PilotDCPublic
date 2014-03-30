@@ -4,6 +4,7 @@ import datetime
 import flask
 from flask.ext.bcrypt import Bcrypt as bcrypt
 import math
+import json
 import pprint
 import pytz
 import sqlite3
@@ -256,6 +257,11 @@ def mark_completed(favor_id):
 @app.route('/about/')
 def about():
     return flask.render_template('about.html')
+
+@app.route('/username_search_endpoint/', methods=['POST'])
+def username_search():
+    users = query_db('SELECT username FROM users WHERE username LIKE ? ORDER BY LENGTH(username) LIMIT 100', flask.request.form.get('search', '') + '%')
+    return json.dumps([ q['username'] for q in users ])
 
 if __name__ == '__main__':
     app.run(debug = config.debug)
