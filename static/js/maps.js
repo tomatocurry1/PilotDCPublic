@@ -12,8 +12,8 @@ var map;
 var marker;
 
 function set_lat_long(coords) {
-    $("#longitude").val(coords.k);
-    $("#latitude").val(coords.A);
+    $("#longitude").val(coords.A);
+    $("#latitude").val(coords.k);
 }
 
 function initialize() {
@@ -24,6 +24,7 @@ function initialize() {
         center: latlng
     };
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    google.maps.event.trigger(map, 'resize');
 }
 
 function code_address() {

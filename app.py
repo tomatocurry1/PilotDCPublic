@@ -125,15 +125,16 @@ def user(user_id = None):
         else:
             return flask.abort(404)
     else:
-        user_info = query_db('SELECT username, join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
+        user_info = query_db('SELECT username, longitude, latitude, join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
         if not user_info:
             return flask.abort(404)
 
-        favors_ongoing = query_db('SELECT title, cost, content, favor_id FROM favors WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', user_id)
-        favors_posted = query_db('SELECT title, cost, content, favor_id FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', user_id)
-        favors_cmpltd = query_db('SELECT title, cost, content, favor_id FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', user_id)
+        favors_ongoing = query_db('SELECT title, cost, payment, username, content, favor_id, user_id, state FROM favors JOIN users ON favors.creator_id = users.user_id WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', user_id)
+        favors_posted = query_db('SELECT title, cost, payment, username, content, favor_id, user_id, state FROM favors JOIN users ON favors.creator_id = users.user_id WHERE creator_id = ? ORDER BY creation_date DESC', user_id)
+        favors_cmpltd = query_db('SELECT title, cost, payment, username, content, favor_id, user_id, state FROM favors JOIN users ON favors.creator_id = users.user_id WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', user_id)
 
-        return flask.render_template('usertemplate.html', username=user_info['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=favors_ongoing, posted_favors=favors_posted, completed_favors=favors_cmpltd)
+
+        return flask.render_template('usertemplate.html', ongoing_favors=favors_ongoing, posted_favors=favors_posted, completed_favors=favors_cmpltd, **user_info)
 
 @app.route('/requestfavor/', methods=['GET', 'POST'])
 def create_favor():
@@ -186,7 +187,7 @@ def create_favor():
 
 @app.route('/find/')
 def find_tasks():
-    q = query_db('SELECT *, coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude) FROM favors JOIN users ON favors.creator_id = users.user_id WHERE state = 0 ORDER BY coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude)')
+    q = query_db('SELECT * FROM favors JOIN users ON favors.creator_id = users.user_id WHERE state = 0 AND creator_id != ? ORDER BY coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude)', flask.session['user_id'])
     #return pprint.pformat(q)
     return flask.render_template('findfavors.html', blocks=q)
 

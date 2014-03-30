@@ -8,7 +8,11 @@
             <span class="badge alert-success">you are working on this favor</span>
         {% endif %}
         <a href="/favor/{{block['favor_id']}}"><strong>{{block['title']}}</strong></a>
+<<<<<<< HEAD
+        <a href="/user/{{block['user_id']}}" class="requester-name">{{block['username']}}</a>
+=======
         <a href="/user/{{block['creator_id']}}" class="requester-name">{{block['username']}}</a>
+>>>>>>> 3557ec6eb46a387855624e08d501dd7dab194a03
     </div>
     <p>{{block['content']}}</p>
     <p>{{block['payment']}}</p>
