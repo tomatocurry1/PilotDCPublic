@@ -141,7 +141,7 @@ def user(user_id = None):
         #    'compd': favors_cmpltd
         #})
 
-        return flask.render_template('usertemplate.html', username=user_info['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=[], posted_favors=favors_posted, completed_favors=favors_cmpltd)
+        return flask.render_template('usertemplate.html', username=flask.session['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=[], posted_favors=favors_posted, completed_favors=favors_cmpltd)
 
 @app.route('/requestfavor/', methods=['GET', 'POST'])
 def create_favor():
