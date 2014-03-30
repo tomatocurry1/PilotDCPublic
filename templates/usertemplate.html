@@ -3,27 +3,51 @@
 {% block title %}User - About {% endblock %}
 {% block head %}
     {{ super() }}
+    <link href="{{url_for('static', filename='css/maps.css')}}" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="{{url_for('static', filename='js/maps.js')}}" type="text/javascript"></script>
     <link href="{{url_for('static', filename='css/usertemplate.css')}}" rel="stylesheet">
+
+    <script type="text/javascript">
+        google.maps.event.addDomListener(window, 'load', initialize);
+        var map;
+        var marker;
+
+        function initialize() {
+            var latlng = new google.maps.LatLng( {{latitude}} , {{longitude}} );
+            var mapOptions = {
+                zoom: 8,
+                center: latlng
+            };
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+            marker = new google.maps.Marker({
+                map: map,
+                position: latlng,
+                draggable: false,
+            });
+            google.maps.event.trigger(map, 'resize');
+        }
+    </script>
 {% endblock %}
 {% import "favor_block.html" as fb %}
 {% block body %}
     <div id="user-info" class="container">
         <div class="row">
-            <div id="propic" class="col-sm-6"><img src="http://placehold.it/300x400" class="img-circle"></div>
-            <div id="description" class="col-sm-3">
+            <div id="map-wrapper">
+                <div id="map-canvas"></div>
+            </div>
+            <div id="description" class="col-sm-6">
                 <ul class="list-unstyled">
-
-                    <li><h3>{{username}}</h3></li>
-                    <li>Member since {{timestamp | timestamp_format }}</li>
-                    <!--<li>Areas of Strength: [insert]</li>-->
-                    <li>Tips: {{karma}}</li>
+                    <li><h1>{{username}}</h1></li>
+                    <li><h2>Member since {{join_date | timestamp_format }}</h2></li>
+                    <li><h2>{{karma}} karma</h2></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <h2>Favors</h2>
-    <div class="ongoing">
+    <h1>Favors</h1>
+    <div class="ongoing col-md-12">
         <h3>Ongoing</h3>
 
         {% if ongoing_favors %}
