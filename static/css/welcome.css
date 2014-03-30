@@ -12,9 +12,26 @@
 }
 
 #username {
-	margin-top: 30px;
+	margin-top: 0px;
 }
 
 #regbutton {
 	width: 304px;
+}
+
+#left {
+    text-align: justify;
+    width: 300px;
+}
+
+#left img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.row {
+    width: 650px;
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -1,6 +1,7 @@
 $(document).ready(function() {
     function switch_reg_to_log() {
         $("#email").slideUp("fast");
+        $("#map-wrapper").slideUp("fast");
         $("#latitude").slideUp("fast");
         $("#longitude").slideUp("fast");
         $("#login-to-register").addClass("hidden");
@@ -12,11 +13,12 @@ $(document).ready(function() {
 
     function switch_log_to_reg() {
         $("#email").slideDown("fast");
+        $("#map-wrapper").slideDown("fast");
         $("#latitude").slideDown("fast");
         $("#longitude").slideDown("fast");
         $("#login-to-register").removeClass("hidden");
         $("#register-to-login").addClass("hidden");
-        $("#username").animate({"margin-top": "30px"}, "fast");
+        $("#username").animate({"margin-top": "0px"}, "fast");
         $("#regbutton").text("Register");
         $("#mainform").attr("action", "/register/");
     }

@@ -12,7 +12,11 @@
 {% block body %}
     <div id="register" class="container">
         <div class="row">
-            <div id="left" class="col-sm-6"><img id="bigimg" src="//placehold.it/300x300"/></div>
+            <div id="left" class="col-sm-6">
+                <img id="bigimg" src="//placehold.it/300x300"/>
+                <h3 id="login-to-register" class="switcher">Already a user? <button id="login-button" class="btn btn-primary">Login</button></h3>
+                <h3 id="register-to-login" class="switcher hidden">Not signed up? <button id="register-button" class="btn btn-primary">Register</button>
+            </div>
             <div id="right" class="col-sm-6">
                 <form id="mainform" role="form" method="post" action="/register/">
                     <div class="form-group">
@@ -34,7 +38,4 @@
             </div>
         </div>
     </div>
-
-    <h3 id="login-to-register" class="text-center">Already a user? <button id="login-button" class="btn btn-primary">Login</button></h3>
-    <h3 id="register-to-login" class="text-center hidden">Not signed up? <button id="register-button" class="btn btn-primary">Register</button>
 {% endblock %}
