@@ -1,0 +1,18 @@
+#map-wrapper {
+    width: 304px;
+}
+
+#map-canvas {
+    height: 304px;
+    padding: 5px 0 5px;
+}
+
+#address {
+    width: auto;
+    display: inline-block;
+}
+
+.halfinput {
+    width: 150px;
+    display: inline-block;
+}

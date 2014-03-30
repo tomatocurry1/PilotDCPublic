@@ -1,5 +1,21 @@
-.content {
+#pushdown {
     padding-top: 50px;
+}
+
+.flash {
+    height: 30px;
+    padding: 5px 0 5px;
+    text-align: center;
+}
+
+.flash-error {
+    background-color: #EBB5BC;
+    color: #610808;
+}
+
+.flash-success {
+    background-color: #ABFFAE;
+    color: #004002;
 }
 
 #logo {
@@ -21,7 +37,7 @@ html, body {
     min-height: 100%;
     height: auto;
     margin: 0 auto -30px;
-    padding: 0 0 60px;
+    padding: 50px 0 60px;
 }
 
 #footer {
@@ -29,4 +45,10 @@ html, body {
     height: 30px;
     background-color: #c5c5c5;
     color: #5a5a5a;
+}
+
+.active {
+    font-weight: bold;
+    pointer-events: none;
+    cursor: default;
 }

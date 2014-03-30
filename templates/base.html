@@ -15,8 +15,8 @@
                 ('/login', 'login', 'Login / Register', 'username' not in session),
                 ('/logout', 'logout', 'Logout', 'username' in session),
                 ('/user', 'userpage', 'You', 'username' in session),
-                ('/create', 'create', 'Post Task', 'username' in session),
-                ('/find', 'findtask', 'Find Tasks', True),
+                ('/requestfavor', 'create', 'Request Favor', 'username' in session),
+                ('/find', 'findtask', 'Find Favors', True),
                 ('/about', 'about', 'About Us', True),
                 ('/community', 'comm', 'Community', True),
             ] %}
@@ -27,7 +27,7 @@
                     <a href="/" class="navbar-brand"><img id="logo" src="http://placehold.it/100x100" height="50" width="50">Favorable</a>
                     {% for href, tag_id, display, should_render in nav %}
                         {% if should_render %}
-                            <a href="{{href}}" id="{{tag_id}}" class="navbar-text navbar-link{% if tag_id == nav_current %} active{% endif %}">
+                            <a href="{{href}}" id="{{tag_id}}" class="navbar-text navbar-link{% if tag_id == nav_current %} active disabled{% endif %}">
                                 {{display}}
                             </a>
                         {% endif %}
@@ -35,16 +35,17 @@
                 </div>
             </nav>
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endwith %}
-
-            <div class="content container">
-                <h1> {% block header %} {{ self.title() }} {% endblock %} </h1>
-                <div>
-                    {% block body %} {% endblock %}
+            <div id="#pushdown">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endwith %}
+                <div class="content container">
+                    <h1> {% block header %} {{ self.title() }} {% endblock %} </h1>
+                    <div>
+                        {% block body %} {% endblock %}
+                    </div>
                 </div>
             </div>
         </div>
