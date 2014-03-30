@@ -6,11 +6,7 @@ body {
 	display: inline-block;
 }
 
-#logo {
-	float: right;
-	margin-right: -70px;
-	margin-bottom: -70px;
-}
+
 #huh {
 	float: left;
 	font-size: 200px;
