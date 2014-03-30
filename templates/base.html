@@ -25,7 +25,7 @@
             {% set nav_current = nav_current | default('index') %}
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="container" text-align="center">
-                    <a href="/" class="navbar-brand"><img id="logo" src="http://placehold.it/100x100" height="50" width="50">Favorable</a>
+                    <a href="/" class="navbar-brand"><img id="logo" src="/static/img/ICON.png" height="50" width="50">Favorable</a>
                     {% for href, tag_id, display, should_render in nav %}
                         {% if should_render %}
                             <a href="{{href}}" id="{{tag_id}}" class="navbar-text navbar-link{% if tag_id == nav_current %} active disabled{% endif %}">

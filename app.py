@@ -129,9 +129,9 @@ def user(user_id = None):
         if not user_info:
             return flask.abort(404)
 
-        favors_ongoing = query_db('SELECT title, cost, content FROM favors WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', user_id)
-        favors_posted = query_db('SELECT title, cost, content FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', user_id)
-        favors_cmpltd = query_db('SELECT title, cost, content FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', user_id)
+        favors_ongoing = query_db('SELECT title, cost, content, favor_id FROM favors WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', user_id)
+        favors_posted = query_db('SELECT title, cost, content, favor_id FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', user_id)
+        favors_cmpltd = query_db('SELECT title, cost, content, favor_id FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', user_id)
 
         return flask.render_template('usertemplate.html', username=user_info['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=favors_ongoing, posted_favors=favors_posted, completed_favors=favors_cmpltd)
 
@@ -237,6 +237,7 @@ def mark_completed(favor_id):
         flask.flash('This favor has expired', 'error')
         return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
     query_db('UPDATE favors SET state = 2 WHERE favor_id = ?', favor_id)
+    query_db('UPDATE users SET karma = karma+1 WHERE user_id = ?', favor['worker_id'])
     return flask.redirect(flask.url_for('get_favor', favor_id=favor_id))
 
 @app.route('/about/')
