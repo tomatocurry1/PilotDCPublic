@@ -5,6 +5,7 @@ import flask
 from flask.ext.bcrypt import Bcrypt as bcrypt
 import math
 import pprint
+import pytz
 import sqlite3
 import time
 
@@ -13,6 +14,8 @@ import config
 app = flask.Flask(__name__)
 app.secret_key = config.secret
 passcheck = bcrypt(app)
+
+timezone_est = pytz.timezone('America/New_York')
 
 def distance_on_unit_sphere(lat1, long1, lat2, long2):
     # http://www.johndcook.com/python_longitude_latitude.html
@@ -28,9 +31,9 @@ def distance_on_unit_sphere(lat1, long1, lat2, long2):
     # in your favorite set of units to get length.
     return arc * 3963.1676 # in miles
 
-def timestamp_format(timestamp, fmt='%I:%m %p, %m/%d/%Y'):
+def timestamp_format(timestamp, fmt='%I:%M %p, %m/%d/%Y'):
     print(timestamp)
-    return datetime.datetime.fromtimestamp(timestamp).strftime(fmt)
+    return datetime.datetime.fromtimestamp(timestamp).replace(tzinfo=pytz.utc).astimezone(timezone_est).strftime(fmt)
 
 app.jinja_env.filters['timestamp_format'] = timestamp_format
 
@@ -158,7 +161,10 @@ def create_favor():
         deadline = -1
         try:
             print('TIMMMMMMMEEEE', deadline_date + ' ' + deadline_time)
-            deadline = int(time.mktime(time.strptime(deadline_date + ' ' + deadline_time, '%Y-%m-%d %H:%M')))
+            #deadline = int(time.mktime(time.strptime(deadline_date + ' ' + deadline_time, '%Y-%m-%d %H:%M')))
+            deadline = int(
+                timezone_est.localize(datetime.datetime.strptime(deadline_date + ' ' + deadline_time, '%Y-%m-%d %H:%M')).astimezone(pytz.utc).timestamp()
+            )
         except:
             pass
         if deadline < 0:

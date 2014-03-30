@@ -5,3 +5,5 @@ MarkupSafe==0.19
 Werkzeug==0.9.4
 itsdangerous==0.24
 py-bcrypt==0.4
+py3k-bcrypt==0.3
+pytz==2014.2
