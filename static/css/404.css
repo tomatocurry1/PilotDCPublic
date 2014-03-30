@@ -1,0 +1,18 @@
+body {
+	padding-top: 10%;
+}
+
+.col-sm-6 {
+	display: inline-block;
+}
+
+#logo {
+	float: right;
+	margin-right: -70px;
+	margin-bottom: -70px;
+}
+#huh {
+	float: left;
+	font-size: 200px;
+	padding: 20px;
+}
