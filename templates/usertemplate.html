@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% set nav_current = 'user' %}
+{% block title %}User - About {% endblock %}
+{% block head %}
+    {{ super() }}
+    <link href="{{url_for('static', filename='css/usertemplate.css')}}" rel="stylesheet">
+{% endblock %}
+{% import "favor_block.html" as fb %}
+{% block body %}
+    <div id="user-info" class="container">
+        <div class="row">
+            <div id="propic" class="col-sm-6"><img src="http://placehold.it/300x400" class="img-circle"></div>
+            <div id="description" class="col-sm-3">
+                <ul class="list-unstyled">
+
+                    <li><h3>{{username}}</h3></li>
+                    <li>Member since {{timestamp | timestamp_format }}</li>
+                    <!--<li>Areas of Strength: [insert]</li>-->
+                    <li>Tips: {{karma}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h2>Favors</h2>
+    <div class="ongoing">
+        <h3>Ongoing</h3>
+
+        {% if ongoing_favors %}
+            <div id="favorlist">
+                {% for block in ongoing_favors %}
+                    {{ fb.render_block(block) }}
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No favors found</p>
+        {% endif %}
+
+    </div>
+    <div class="posted col-md-6">
+        <h3>Posted</h3>
+            {% if posted_favors %}
+                <div id="favorlist">
+                    {% for block in posted_favors %}
+                        {{ fb.render_block(block) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No favors found</p>
+            {% endif %}        
+    </div>
+    <div class="completed col-md-6">
+        <h3>Completed</h3>
+            {% if completed_favors %}
+                <div id="favorlist">
+                    {% for block in completed_favors %}
+                        {{ fb.render_block(block) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No favors found</p>
+            {% endif %}        
+    </div>
+    <!-- <div id="favors">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Cost</th>
+                </tr>
+                <thead>
+                    <tbody>
+                        <tr>
+                            <th>Title1</th>
+                            <th>Content1</th>
+                            <th>Cost1</th>
+                        </tr>
+                        <tr>
+                            <th>Title2</th>
+                            <th>Content2</th>
+                            <th>Cost2</th>
+                        </tr>
+                        <tr>
+                            <th>Title3</th>
+                            <th>Content3</th>
+                            <th>Cost3</th>
+                        </tr>
+                    </tbody>
+                </thead>
+            </thead>
+        </div>
+
+    </table>
+
+
+    <div class = "row">
+        <div class="col-md-1" id ="bottom">
+            <h3>Posted</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Tip</th>
+                    </tr>
+                    <thead>
+                        <tbody>
+                            <tr>
+                                <th>Title1</th>
+                                <th>Content1</th>
+                                <th>Cost1</th>
+                            </tr>
+                            <tr>
+                                <th>Title2</th>
+                                <th>Content2</th>
+                                <th>Cost2</th>
+                            </tr>
+                            <tr>
+                                <th>Title3</th>
+                                <th>Content3</th>
+                                <th>Cost3</th>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </thead>
+
+
+            </table>
+        </div>
+
+
+        
+        <div class="col-md-1" id = "bottom">
+            <h3>Completed</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>Tipped</th>
+                    </tr>
+                    <thead>
+                        <tbody>
+                            <tr>
+                                <th>Title1</th>
+                                <th>Content1</th>
+                                <th>Cost1</th>
+                            </tr>
+                            <tr>
+                                <th>Title2</th>
+                                <th>Content2</th>
+                                <th>Cost2</th>
+                            </tr>
+                            <tr>
+                                <th>Title3</th>
+                                <th>Content3</th>
+                                <th>Cost3</th>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </thead>
+            </table>
+        </div> -->
+{% endblock %}
