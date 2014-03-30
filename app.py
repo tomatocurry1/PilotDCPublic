@@ -197,6 +197,8 @@ def create_favor():
 
 @app.route('/find/')
 def find_tasks():
+    if 'user_id' not in flask.session:
+        return flask.redirect(flask.url_for('login'))
     q = query_db('SELECT * FROM favors JOIN users ON favors.creator_id = users.user_id WHERE state = 0 AND creator_id != ? ORDER BY coordinate_distance(users.latitude, users.longitude, favors.latitude, favors.longitude)', flask.session['user_id'])
     #return pprint.pformat(q)
     return flask.render_template('findfavors.html', blocks=q)

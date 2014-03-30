@@ -17,7 +17,7 @@
                 ('/logout', 'logout', 'Logout', 'username' in session),
                 ('/user', 'userpage', 'You', 'username' in session),
                 ('/requestfavor', 'create', 'Request Favor', 'username' in session),
-                ('/find', 'findtask', 'Find Favors', True),
+                ('/find', 'findtask', 'Find Favors', 'username' in session),
                 ('/about', 'about', 'About Us', True),
 
             ] %}
