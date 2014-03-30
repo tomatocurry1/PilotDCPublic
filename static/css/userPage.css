@@ -11,10 +11,11 @@ img {
 	padding-top: 30px;
 }
 
-#inProgress {
+#favors {
 	border: 0 auto;
 }
 
-th, td{
-	width: 33%;
+#bottom {
+	width:50%;
 }
+
