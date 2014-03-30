@@ -1,0 +1,22 @@
+body {
+	padding-top: 60px;
+}
+
+#propic {
+	float: right;
+}
+
+img {
+	border: 5px solid black;
+}
+
+#username {
+	padding-top: 30px;
+}
+
+#inProgress {
+	margin-left: 25%;
+	margin-right: 25%;
+	width: 50%;
+	border: 0 auto;
+}
