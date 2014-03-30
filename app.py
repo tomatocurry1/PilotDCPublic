@@ -27,7 +27,7 @@ def teardown_request(ex):
 
 @app.route('/')
 def index():
-    return 'hello world'
+    return flask.render_template('index.html')
 
 @app.route('/login/', methods=['GET', 'POST'])
 @app.route('/login', methods=['POST'])
