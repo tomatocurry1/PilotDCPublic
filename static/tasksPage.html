@@ -23,7 +23,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/test.js"></script>
+	<script src="js/tasksPage.js"></script>
 
 	<!-- Navgation -->
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -37,32 +37,43 @@
 			<a href="http://ask.fm/KaraokeGod" class="navbar-text navbar-link">About Us</a>
 		</div>
 	</nav>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6"><a href="#" class="list-group-item active">
-				<h4 class="list-group-item-heading">Trending</h4>
-				<p class="list-group-item-text">...</p>
-				<p class="list-group-item-text">...</p>
-				<p class="list-group-item-text">...</p>
-				<p class="list-group-item-text">...</p>
-			</a></div>
-			<div class="col-md-6"><a href="#" class="list-group-item active">
-				<h4 class="list-group-item-heading">Ongoing</h4>
-				<p class="list-group-item-text">...</p>
-			</a></div>
-		</div>
-		<div class="row">
-			<div class="col-md-6"><a href="#" class="list-group-item active">
-				<h4 class="list-group-item-heading">Recently Completed</h4>
-				<p class="list-group-item-text">...</p>
-			</a></div>
-			<div class="col-md-6"><a href="#" class="list-group-item active">
-				<h4 class="list-group-item-heading">Friends</h4>
-				<p class="list-group-item-text">...</p>
-			</a></div>
+
+	<div class="text-center">
+		<div class="btn-group">
+			<button id="local" type="button" class="btn btn-default">Alphabetical</button>
+			<button id="friends" type="button" class="btn btn-default">Location</button>
+			<button id="date" type="button" class="btn btn-default">Expiration</button>
 		</div>
 	</div>
 
+	<div id="inProgress">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Content</th>
+					<th>Cost</th>
+				</tr>
+			<thead>
+			<tbody>
+				<tr>
+					<th>Name1</th>
+					<th>Content1</th>
+					<th>Cost1</th>
+				</tr>
+				<tr>
+					<th>Name2</th>
+					<th>Content2</th>
+					<th>Cost2</th>
+				</tr>
+				<tr>
+					<th>Name3</th>
+					<th>Content3</th>
+					<th>Cost3</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
 
