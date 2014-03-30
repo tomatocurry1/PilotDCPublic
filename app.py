@@ -125,15 +125,15 @@ def user(user_id = None):
         else:
             return flask.abort(404)
     else:
-        user_info = query_db('SELECT join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
+        user_info = query_db('SELECT username, join_date, karma FROM users WHERE user_id = ?', user_id, one=True)
         if not user_info:
             return flask.abort(404)
 
-        favors_ongoing = query_db('SELECT title, cost, content FROM favors WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', flask.session['user_id'])
-        favors_posted = query_db('SELECT title, cost, content FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', flask.session['user_id'])
-        favors_cmpltd = query_db('SELECT title, cost, content FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', flask.session['user_id'])
+        favors_ongoing = query_db('SELECT title, cost, content FROM favors WHERE state = 1 AND worker_id = ? ORDER BY deadline DESC', user_id)
+        favors_posted = query_db('SELECT title, cost, content FROM favors WHERE creator_id = ? ORDER BY creation_date DESC', user_id)
+        favors_cmpltd = query_db('SELECT title, cost, content FROM favors WHERE worker_id = ? AND state = 2 ORDER BY deadline DESC', user_id)
 
-        return flask.render_template('usertemplate.html', username=flask.session['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=favors_ongoing, posted_favors=favors_posted, completed_favors=favors_cmpltd)
+        return flask.render_template('usertemplate.html', username=user_info['username'], timestamp=user_info['join_date'], karma=user_info['karma'], ongoing_favors=favors_ongoing, posted_favors=favors_posted, completed_favors=favors_cmpltd)
 
 @app.route('/requestfavor/', methods=['GET', 'POST'])
 def create_favor():
